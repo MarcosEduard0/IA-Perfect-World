@@ -1,0 +1,3 @@
+pyinstaller nome.py
+
+pyinstaller --onefile nome.py
