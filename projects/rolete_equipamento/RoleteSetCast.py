@@ -4,6 +4,10 @@ import ctypes  # Para criar janelas de aviso
 import pyautogui
 from PIL import Image, ImageOps, ImageEnhance, ImageFilter
 import pytesseract as ocr
+import sys
+import keyboard
+
+sys.path.append("../../")
 
 import utils.function as f
 
@@ -56,17 +60,20 @@ def obter_quantidade_tempo_adds(imagem):
     palavras = re.split(
         r"[^0-9A-Za-zÁ-ú]+", texto_adds
     )  # incluí Acentos de modo simplificado
-    # print(palavras)
-    total_tempo = palavras.count("Tempo")
-    return total_tempo
+    print(palavras)
+    adds = {}
+    adds["Invocacao"] = palavras.count("Tempo")
+    adds["Elemental"] = palavras.count("Elemental") + palavras.count("Slemental")
+
+    return adds
 
 
 def main():
     # Entrada de dados
     while True:
         try:
-            qtd_invoc = int(input("Quantos adds de invocação você quer (1 a 4)?\n> "))
-            if 1 <= qtd_invoc <= 4:
+            qtd_adds = int(input("Quantos adds de invocação você quer (1 a 4)?\n> "))
+            if 1 <= qtd_adds <= 4:
                 break
             else:
                 print("Valor inválido. Digite um número de 1 a 4.\n")
@@ -90,7 +97,7 @@ def main():
     f.ShowWindow("Perfect World - Rate Media: Jornada ao Oeste")
 
     # Localiza o botão Reproduzir
-    botao_reproduzir = f.LocateButton("image/1920x1080/botaoReproduzirOn.png")
+    botao_reproduzir = f.LocateButton(r"..\..\includes\1920x1080\botaoReproduzirOn.png")
     if not botao_reproduzir:
         ctypes.windll.user32.MessageBoxW(
             0, "Não foi possível localizar o botão 'Reproduzir'.", "Erro", 0
@@ -98,10 +105,6 @@ def main():
         return
 
     # Ajusta área a ser capturada
-    #   x1 = botao_reproduzir[0] + 65
-    #   y1 = botao_reproduzir[1] - 170
-    #   x2 = botao_reproduzir[0] + 180
-    #   y2 = botao_reproduzir[1] - 55
     area_adds = (
         botao_reproduzir[0] + 65,
         botao_reproduzir[1] - 170,
@@ -110,6 +113,11 @@ def main():
     )
 
     while tentativas_feitas <= rolete:
+
+        if keyboard.is_pressed("ctrl+c"):
+            print("\nLoop interrompido pelo usuário.")
+            break
+
         # Clica em reproduzir
         pyautogui.click(botao_reproduzir[0], botao_reproduzir[1])
         time.sleep(2.5)  # Espera forjar o item (ajuste se precisar mais/menos)
@@ -118,16 +126,31 @@ def main():
         img_cortada = capturar_adds(area_adds)
 
         # Extrai a contagem de "Tempo" (ou seja lá o que vc estiver procurando)
-        total_tempo = obter_quantidade_tempo_adds(img_cortada)
-        print(f"Tentativa {tentativas_feitas+1}: {total_tempo} add(s) de invocação")
+        atributos = obter_quantidade_tempo_adds(img_cortada)
+        print(
+            f"Tentativa {tentativas_feitas+1}: {atributos["Invocacao"]} add(s) de invocação"
+        )
 
-        if total_tempo >= qtd_invoc:
+        if atributos["Invocacao"] >= qtd_adds:
             # Se já atendeu a condição, segura o novo add
             pyautogui.click(botao_reproduzir[0] + 155, botao_reproduzir[1] - 15)
             pyautogui.alert(
                 text=(
                     f"Parabéns, conseguimos uma parte do set com "
-                    f"{total_tempo} add(s) de Invocação!"
+                    f"{atributos["Invocacao"]} add(s) de Invocação!"
+                ),
+                title="I.A do John",
+                button="Obrigado",
+            )
+            break
+
+        elif atributos["Elemental"] >= qtd_adds:
+            # Se já atendeu a condição, segura o novo add
+            pyautogui.click(botao_reproduzir[0] + 155, botao_reproduzir[1] - 15)
+            pyautogui.alert(
+                text=(
+                    f"Parabéns, conseguimos uma parte do set com "
+                    f"{atributos["Elemental"]} add(s) de Elemental!"
                 ),
                 title="I.A do John",
                 button="Obrigado",

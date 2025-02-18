@@ -5,6 +5,7 @@ import pyautogui
 from PIL import ImageOps, ImageEnhance, ImageFilter
 import pytesseract as ocr
 import sys
+import keyboard
 
 sys.path.append("../../")
 
@@ -50,6 +51,13 @@ def capturar_adds(bounding_box):
     return cropped_img
 
 
+def log_palavras(palavras, arquivo_log="ocr_log.txt"):
+    """Salva as palavras extraídas pelo OCR em um arquivo de log."""
+    with open(arquivo_log, "a", encoding="utf-8") as f:
+        for palavra in palavras:
+            f.write(palavra + "\n")
+
+
 def obter_quantidade_adds(imagem):
     """
     Extrai o texto da imagem (usando a função de OCR),
@@ -57,15 +65,58 @@ def obter_quantidade_adds(imagem):
     e retorna a contagem.
     """
     texto_adds = ler_texto_ocr(imagem, lang="por")
+    texto_adds = texto_adds.replace("Guia", "").replace("Destino", "")
     palavras = re.split(
         r"[^0-9A-Za-zÁ-ú]+", texto_adds
     )  # incluí Acentos de modo simplificado
-    print(palavras)
-    total_atqm = palavras.count("AtaM") + palavras.count("AtqM") + palavras.count("AtM")
-    total_espirito = palavras.count("Espírito") + palavras.count("Espíritu") + palavras.count("Espirito") + palavras.count("Espiritu")
-    total_penetracao = palavras.count("Mágica") + palavras.count("Magica")
 
-    return total_atqm, total_espirito, total_penetracao
+    # print(palavras)
+
+    # Log das palavras no arquivo de log
+    log_palavras(palavras)
+
+    # Contagem específica das palavras relacionadas a ataque
+    total_atqm = (
+        palavras.count("AtaM")
+        + palavras.count("AtqM")
+        + palavras.count("AtgM")
+        + palavras.count("AtpM")
+        + palavras.count("AtM")
+    )
+    total_penetracao_magica = palavras.count("Mágica") + palavras.count("Magica")
+
+    total_atqf = palavras.count("físico") + palavras.count("fisico")
+    total_penetracao_fisica = palavras.count("Física") + palavras.count("Fisica")
+
+    total_espirito = (
+        palavras.count("Espírito")
+        + palavras.count("Espíritu")
+        + palavras.count("Espirito")
+        + palavras.count("Espiritu")
+    )
+    total_def = palavras.count("Def")
+    total_defM = palavras.count("DefM")
+    total_hp = palavras.count("HP")
+    total_elemetos = (
+        palavras.count("Madeira")
+        + palavras.count("Metal")
+        + palavras.count("Fogo")
+        + palavras.count("Água")
+        + palavras.count("Terra")
+    )
+
+    adds = {
+        "Ataque Magico": total_atqm,
+        "Penetracao Magica": total_penetracao_magica,
+        "Ataque Fisico": total_atqf,
+        "Penetracao Fisica": total_penetracao_fisica,
+        "Espirito": total_espirito,
+        "Defesa": total_def - total_elemetos,
+        "Defesa Magica": total_defM,
+        "HP": total_hp,
+    }
+
+    return adds
 
 
 def main():
@@ -87,7 +138,7 @@ def main():
     area_adds = (
         botao_reproduzir[0] + 170,
         botao_reproduzir[1] - 410,
-        botao_reproduzir[0] + 325,
+        botao_reproduzir[0] + 327,
         botao_reproduzir[1] - 60,
     )
 
@@ -100,26 +151,66 @@ def main():
         img_cortada = capturar_adds(area_adds)
 
         # Extrai a contagem de "Tempo" (ou seja lá o que vc estiver procurando)
-        total_atqm, total_espirito, total_penetracao = obter_quantidade_adds(
-            img_cortada
-        )
+        atributos = obter_quantidade_adds(img_cortada)
+        # print(
+        #     f"\nAtaque Magico: {atributos['Ataque Magico']} Espirito: {atributos['Espirito']} Penetracao Magica: {atributos['Penetracao Magica']} Defesa: {atributos['Defesa']}"
+        # )
         print(
-            f"Ataque Magico: {total_atqm} Espirito: {total_espirito} Penetracao Magica: {total_penetracao}"
+            f"\nAtaque Magico: {atributos['Ataque Fisico']} Espirito: {atributos['Espirito']} Penetracao Magica: {atributos['Penetracao Fisica']}"
         )
 
-        if sum([total_atqm, total_espirito, total_penetracao]) >= 6:
+        if keyboard.is_pressed("ctrl+c"):
+            print("\nLoop interrompido pelo usuário.")
+            break
+
+        # if (
+        #     atributos["Ataque Magico"] >= 2
+        #     and atributos["Espirito"] >= 2
+        #     and atributos["Penetracao Magica"] >= 1
+        # ):
+        #     # Se já atendeu a condição, segura o novo add
+        #     pyautogui.click(botao_reproduzir[0] + 155, botao_reproduzir[1] - 15)
+        #     pyautogui.alert(
+        #         text=(
+        #             f"Parabéns, conseguimos uma astrolábio de ATAQUE com {atributos['Ataque Magico']}-{atributos['Espirito']}-{atributos['Penetracao Magica']}"
+        #         ),
+        #         title="I.A do John",
+        #         button="Obrigado",
+        #     )
+        #     exit()
+
+        if (
+            atributos["Ataque Fisico"] >= 2
+            and atributos["Espirito"] >= 2
+            and atributos["Penetracao Fisica"] >= 2
+        ):
             # Se já atendeu a condição, segura o novo add
             pyautogui.click(botao_reproduzir[0] + 155, botao_reproduzir[1] - 15)
             pyautogui.alert(
                 text=(
-                    f"Parabéns, conseguimos uma astrolábio com {total_atqm}-{total_espirito}-{total_penetracao}"
-                    f"Ataque Magico: {total_atqm} Espirito: {total_espirito} Penetracao Magica: {total_penetracao}"
+                    f"Parabéns, conseguimos uma astrolábio de ATAQUE com {atributos['Ataque Magico']}-{atributos['Espirito']}-{atributos['Penetracao Magica']}"
                 ),
                 title="I.A do John",
                 button="Obrigado",
             )
+            exit()
+
+        # elif (
+        #     atributos["Defesa"] >= 2
+        #     and atributos["Espirito"] >= 2
+        #     and atributos["HP"] >= 1
+        # ):
+        #     # Se já atendeu a condição, segura o novo add
+        #     pyautogui.click(botao_reproduzir[0] + 155, botao_reproduzir[1] - 15)
+        #     pyautogui.alert(
+        #         text=(
+        #             f"Parabéns, conseguimos uma astrolábio de DEFESA com {atributos['Defesa']}-{atributos['Espirito']}-{atributos['HP']}"
+        #         ),
+        #         title="I.A do John",
+        #         button="Obrigado",
+        #     )
+        #     exit()
         else:
-            print("clique")
             pyautogui.click(botao_reproduzir)
             time.sleep(0.5)
 

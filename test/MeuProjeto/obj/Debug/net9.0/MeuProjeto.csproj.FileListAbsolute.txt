@@ -1,0 +1,15 @@
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\bin\Debug\net9.0\MeuProjeto.exe
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\bin\Debug\net9.0\MeuProjeto.deps.json
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\bin\Debug\net9.0\MeuProjeto.runtimeconfig.json
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\bin\Debug\net9.0\MeuProjeto.dll
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\bin\Debug\net9.0\MeuProjeto.pdb
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.AssemblyInfoInputs.cache
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.AssemblyInfo.cs
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.csproj.CoreCompileInputs.cache
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.sourcelink.json
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.dll
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\refint\MeuProjeto.dll
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.pdb
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\MeuProjeto.genruntimeconfig.cache
+C:\Users\Marcos Eduardo\Desktop\IA-Perfect-World\test\MeuProjeto\obj\Debug\net9.0\ref\MeuProjeto.dll
