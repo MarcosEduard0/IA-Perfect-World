@@ -45,24 +45,6 @@ def LocateButtonAvatar():
     return BotaoAvatar
 
 
-def LocateButtonGravar():
-
-    BotaoGravar = pyautogui.locateCenterOnScreen(
-        r"image\botaoGravar.png", confidence=0.8
-    )
-    if BotaoGravar == None:
-        BotaoGravar = pyautogui.locateCenterOnScreen(
-            r"image\botaoGravar1.png", confidence=0.8
-        )
-        if BotaoGravar == None:
-            pyautogui.alert(
-                "Erro ao localizar o botão de gravura.\n", "I.A do John", "OK"
-            )
-            exit()
-
-    return BotaoGravar
-
-
 def LocateTaskBarPw():
 
     pw = pyautogui.locateCenterOnScreen(r"image\pw.png", confidence=0.9)
