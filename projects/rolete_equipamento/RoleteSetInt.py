@@ -62,8 +62,11 @@ def obter_quantidade_tempo_adds(imagem):
     )  # incluí Acentos de modo simplificado
     print(palavras)
     adds = {}
-    adds["Invocacao"] = palavras.count("Tempo")
-    adds["Elemental"] = palavras.count("Elemental") + palavras.count("Slemental")
+    adds["Inteligencia"] = (
+        palavras.count("Inteligência")
+        + palavras.count("Inteligencia")
+        + palavras.count("Intelgência")
+    )
 
     return adds
 
@@ -72,7 +75,7 @@ def main():
     # Entrada de dados
     while True:
         try:
-            qtd_adds = int(input("Quantos adds de invocação você quer (1 a 4)?\n> "))
+            qtd_adds = int(input("Quantos adds de inteligencia você quer (1 a 4)?\n> "))
             if 1 <= qtd_adds <= 4:
                 break
             else:
@@ -111,7 +114,6 @@ def main():
         botao_reproduzir[0] + 180,
         botao_reproduzir[1] - 55,
     )
-    TOTAL_INVOCACOES = 0
     while tentativas_feitas <= rolete:
 
         if keyboard.is_pressed("ctrl+c"):
@@ -128,20 +130,17 @@ def main():
         # Extrai a contagem de "Tempo" (ou seja lá o que vc estiver procurando)
         atributos = obter_quantidade_tempo_adds(img_cortada)
 
-        TOTAL_INVOCACOES += atributos["Invocacao"]
         print(
-            f"Tentativa {tentativas_feitas+1}: {atributos["Invocacao"]} add(s) de invocação",
-            f"\tTotal encontrado: {TOTAL_INVOCACOES}",
-            f"\tProbailidade de sucesso: {round(TOTAL_INVOCACOES/(tentativas_feitas+1), 2)}%",
+            f"Tentativa {tentativas_feitas+1}: {atributos["Inteligencia"]} add(s) de Inteligencia",
         )
 
-        if atributos["Invocacao"] >= qtd_adds:
+        if atributos["Inteligencia"] >= qtd_adds:
             # Se já atendeu a condição, segura o novo add
             pyautogui.click(botao_reproduzir[0] + 155, botao_reproduzir[1] - 15)
             pyautogui.alert(
                 text=(
                     f"Parabéns, conseguimos uma parte do set com "
-                    f"{atributos["Invocacao"]} add(s) de Invocação!"
+                    f"{atributos["Inteligencia"]} add(s) de Inteligencia!"
                 ),
                 title="I.A do John",
                 button="Obrigado",
